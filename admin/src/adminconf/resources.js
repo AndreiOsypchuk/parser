@@ -23,7 +23,6 @@ exports.resources = [
       actions: {
         new: {
           before: async (request) => {
-            console.log(request.payload);
             if (request.payload.password) {
               request.payload = {
                 ...request.payload,
@@ -57,7 +56,6 @@ exports.resources = [
       actions: {
         new: {
           before: async (request) => {
-            console.log(request.payload);
             if (request.payload.password) {
               request.payload = {
                 ...request.payload,

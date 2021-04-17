@@ -18,15 +18,11 @@ const paginate = (arr, pagelen) => {
   return { data: res, pages: res.length };
 };
 export const AppTable = () => {
-  const [pagelen, setPagelen] = React.useState(10);
   const [page, setPage] = React.useState(0);
   const {
     state: { table },
   } = React.useContext(RootContext);
-  const { data, pages } = React.useMemo(() => paginate(table, pagelen), [
-    table,
-    pagelen,
-  ]);
+  const { data, pages } = React.useMemo(() => paginate(table, 10), [table]);
 
   const handlePageChange = (e, value) => {
     setPage(() => value - 1);

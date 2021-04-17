@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Input,
-  Flex,
-  Box,
-  Button,
-  Text,
-  FormControl,
-  FormLabel,
-} from '@chakra-ui/react';
+import { Input, Flex, Button, Text } from '@chakra-ui/react';
 import { RootContext } from '../../context';
 
 import logo from '../../logo.png';
@@ -19,8 +11,8 @@ export const Form = ({ title }) => {
   const handleLogin = async () => {
     if (input.login.length && input.password.length) {
       try {
-        await axios.post('http://localhost:4000/auth/login', input);
-        const { data } = await axios('http://localhost:4000/api/sites');
+        await axios.post(`${process.env.REACT_APP_URI}/auth/login`, input);
+        const { data } = await axios(`${process.env.REACT_APP_URI}/api/sites`);
         dispatch({ type: 'LOAD_URLS', payload: data });
         dispatch({ type: 'LOG_IN' });
       } catch (e) {
@@ -40,7 +32,6 @@ export const Form = ({ title }) => {
     const value = e.target.value;
     setInput((input) => ({ ...input, [field]: value }));
   };
-  React.useEffect(() => console.log(input), [input]);
   return (
     <>
       <Flex
@@ -65,13 +56,12 @@ export const Form = ({ title }) => {
           <Flex
             flexDir="column"
             alignItems="center"
-            flexDir="column"
             justifyContent="center"
             h="80%"
             w="100%"
             position="relative"
           >
-            <FormControl isRequired>
+            <form>
               <Input
                 autoComplete="off"
                 mb="20px"
@@ -81,9 +71,8 @@ export const Form = ({ title }) => {
                 name="login"
                 onChange={handleChange}
               />
-            </FormControl>
-            <FormControl isRequired>
               <Input
+                autoComplete="off"
                 type="password"
                 mb="20px"
                 placeholder="Password"
@@ -92,7 +81,7 @@ export const Form = ({ title }) => {
                 name="password"
                 onChange={handleChange}
               />
-            </FormControl>
+            </form>
           </Flex>
           <Button
             _hover={{ backgroundColor: 'green.300', boxShadow: 'lg' }}

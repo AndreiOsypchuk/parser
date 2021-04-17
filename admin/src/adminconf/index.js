@@ -18,24 +18,24 @@ const adminBro = new AdminBro({
   },
 });
 
-exports.AdminRouter = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
-  authenticate: async (email, password) => {
-    try {
-      const admin = await Admin.findOne({ email });
-      if (admin) {
-        const matched = await bcrypt.compare(password, admin.hash);
-        if (matched) {
-          return admin;
-        }
-      }
-      return false;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  },
-  cookiePassword: 'some-secret-password-used-to-secure-cookie',
-});
-// exports.AdminRouter = AdminBroExpressjs.buildRouter(adminBro);
+//exports.AdminRouter = AdminBroExpressjs.buildAuthenticatedRouter(adminBro, {
+//  authenticate: async (email, password) => {
+//    try {
+//      const admin = await Admin.findOne({ email });
+//      if (admin) {
+//        const matched = await bcrypt.compare(password, admin.hash);
+//        if (matched) {
+//          return admin;
+//        }
+//      }
+//      return false;
+//    } catch (e) {
+//      console.log(e);
+//      return false;
+//    }
+//  },
+//  cookiePassword: 'some-secret-password-used-to-secure-cookie',
+//});
+ exports.AdminRouter = AdminBroExpressjs.buildRouter(adminBro);
 
 exports.adminBro = adminBro;

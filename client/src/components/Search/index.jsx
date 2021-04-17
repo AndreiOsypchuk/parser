@@ -17,7 +17,7 @@ export const Search = () => {
   } = React.useContext(RootContext);
   const [site, setSite] = React.useState(sites[0].name.toLowerCase());
   const handleTableFetch = async () => {
-    const { data } = await axios(`http://localhost:4000/api?siteName=${site}`);
+    const { data } = await axios(`${process.env.REACT_APP_URI}/api?siteName=${site}`);
     dispatch({ type: 'LOAD_TABLE', payload: data });
   };
   React.useEffect(() => console.log(site), [site]);
