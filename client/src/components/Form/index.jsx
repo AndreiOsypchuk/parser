@@ -8,20 +8,52 @@ export const Form = ({ title }) => {
   const { dispatch } = React.useContext(RootContext);
   const [input, setInput] = React.useState({ login: '', password: '' });
   const [error, setError] = React.useState('');
+  const sendCredentials = async () => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_URI}/auth/login`,
+        input
+      );
+      if (!data.success) {
+        console.error(data);
+        throw new Error('Something went wrong');
+      }
+    } catch (e) {
+      if (e.response?.status === 403) {
+        throw new Error('Wrong email or password');
+      } else {
+        console.log(e);
+        throw new Error('Something went wrong');
+      }
+    }
+  };
+
+  const loadSites = async () => {
+    try {
+      const { data } = await axios(
+        `${process.env.REACT_APP_URI}/api/sites`,
+        input
+      );
+      if (!data.success || !data.payload) {
+        console.error('Unexpected response recieved', data);
+        throw new Error('Something went wrong');
+      } else if (!Array.isArray(data.payload)) {
+        console.error(`Unexpected payload type: ${typeof data.payload} `, data);
+        throw new Error('Something went wrong');
+      }
+      dispatch({ type: 'LOAD_URLS', payload: data.payload });
+    } catch (e) {
+      throw new Error(e.message);
+    }
+  };
   const handleLogin = async () => {
     if (input.login.length && input.password.length) {
       try {
-        await axios.post(`${process.env.REACT_APP_URI}/auth/login`, input);
-        const { data } = await axios(`${process.env.REACT_APP_URI}/api/sites`);
-        dispatch({ type: 'LOAD_URLS', payload: data });
+        await sendCredentials();
+        await loadSites();
         dispatch({ type: 'LOG_IN' });
       } catch (e) {
-        if (e.response?.status === 403) {
-          setError('Wrong email or password');
-        } else {
-          setError('Something went wrong');
-          console.log(e);
-        }
+        setError(e.message);
       }
     }
   };
