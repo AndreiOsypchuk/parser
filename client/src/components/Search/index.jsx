@@ -10,13 +10,18 @@ import React from 'react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { RootContext } from '../../context';
 import axios from 'axios';
-export const Search = () => {
+export const Search = ({ onSearch }) => {
   const {
     state: { sites },
     dispatch,
   } = React.useContext(RootContext);
   const [site, setSite] = React.useState(sites[0].name?.toLowerCase() || '');
-  const handleTableFetch = async () => {
+
+  const handleChange = (e) => {
+    onSearch(e.target.value);
+  };
+  const handleChoice = async (e) => {
+    setSite(() => e.target.value);
     try {
       const { data } = await axios(
         `${process.env.REACT_APP_URI}/api?siteName=${site}`
@@ -37,16 +42,15 @@ export const Search = () => {
     <Flex w="60%" justifyContent="space-around" alignItems="center">
       <InputGroup w="70%">
         <InputRightElement>
-          <IconButton
-            size="sm"
-            color="gray.400"
-            icon={<SearchIcon />}
-            onClick={handleTableFetch}
-          />
+          <IconButton size="sm" color="gray.400" icon={<SearchIcon />} />
         </InputRightElement>
-        <Input type="tel" placeholder="Search for item" />
+        <Input
+          type="tel"
+          placeholder="Search for item"
+          onChange={handleChange}
+        />
       </InputGroup>
-      <Select w="20%" onChange={(e) => setSite(() => e.target.value)}>
+      <Select w="20%" onChange={handleChoice}>
         {sites
           ? sites.map((site) => (
               <option key={site.url} value={site.name.toLowerCase()}>

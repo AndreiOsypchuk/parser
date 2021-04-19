@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td, Flex, Text } from '@chakra-ui/react';
 import Pagination from '@material-ui/lab/Pagination';
-import { RootContext } from '../../context';
 
 const paginate = (arr, pagelen) => {
   const res = [];
@@ -17,16 +16,17 @@ const paginate = (arr, pagelen) => {
   res.push(page);
   return { data: res, pages: res.length };
 };
-export const AppTable = () => {
-  const [page, setPage] = React.useState(0);
-  const {
-    state: { table },
-  } = React.useContext(RootContext);
-  const { data, pages } = React.useMemo(() => paginate(table, 10), [table]);
 
+export const AppTable = ({ tableData }) => {
+  const [page, setPage] = React.useState(0);
+
+  const { data, pages } = React.useMemo(() => paginate(tableData, 10), [
+    tableData,
+  ]);
   const handlePageChange = (e, value) => {
     setPage(() => value - 1);
   };
+  React.useEffect(() => setPage(() => 0), [tableData]);
   return (
     <Flex
       flexDir="column"
@@ -46,21 +46,23 @@ export const AppTable = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {data[page].map((item) => {
-            return (
-              <Tr
-                key={item.id}
-                _hover={{ backgroundColor: 'rgba(73, 188, 120, 0.30)' }}
-              >
-                <Td w="5%">{item.order + 1}</Td>
-                <Td>{item.name}</Td>
-                <Td isNumeric>{Number(item.price).toFixed(2)}</Td>
-              </Tr>
-            );
-          })}
+          {data[page]
+            ? data[page].map((item) => {
+                return (
+                  <Tr
+                    key={item.id}
+                    _hover={{ backgroundColor: 'rgba(73, 188, 120, 0.30)' }}
+                  >
+                    <Td w="5%">{item.order + 1}</Td>
+                    <Td>{item.name}</Td>
+                    <Td isNumeric>{Number(item.price).toFixed(2)}</Td>
+                  </Tr>
+                );
+              })
+            : null}
         </Tbody>
       </Table>
-      {!table.length ? (
+      {!tableData.length ? (
         <Flex w="100%" h="100%" justifyContent="center" alignItems="center">
           <Text
             fontSize="60px"
