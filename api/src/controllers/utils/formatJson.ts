@@ -1,7 +1,7 @@
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
-exports.formatData = (obj) => {
-  arr = [];
+export const formatData = (obj: any) => {
+  let arr = [];
   for (let key in obj) {
     arr.push({
       id: uuidv4(),
