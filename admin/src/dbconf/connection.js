@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 exports.establishDbConnection = async (cb) => {
   const uri = process.env.DB_HOST || process.env.DB_TEST;
+  let connection;
   try {
-    await mongoose.connect(uri, {
+    connection = await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
@@ -12,4 +13,5 @@ exports.establishDbConnection = async (cb) => {
   } catch (e) {
     cb(e.message);
   }
+  return connection;
 };
