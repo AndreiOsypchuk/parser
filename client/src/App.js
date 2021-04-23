@@ -1,20 +1,21 @@
 import './App.css';
 import React from 'react';
-import { AuthPage, Home } from './pages';
 import { Route, Redirect } from 'react-router-dom';
-import { RootContext } from './context';
+import { Auth, Home } from './pages';
+import { withFade } from './utils';
+import { RoutingTree } from './components';
+import { useSelector } from 'react-redux';
 function App() {
-  const { state } = React.useContext(RootContext);
+  const isLoggedIn = useSelector((store) => store.loggedIn);
   return (
-    <>
-      <Route exact path="/home">
-        {state.loggedIn ? <Home /> : <Redirect to="/" />}
-      </Route>
+    <RoutingTree>
+      <Route path="/home">{isLoggedIn ? <Home /> : <Redirect to="/" />}</Route>
       <Route exact path="/">
-        {!state.loggedIn ? <AuthPage /> : <Redirect to="/home" />}
+        {!isLoggedIn ? <Auth /> : <Redirect to="/home" />}
       </Route>
-    </>
+      <Route path="*" component={() => <h1>Not fount</h1>} />
+    </RoutingTree>
   );
 }
 
-export default App;
+export default withFade(App);

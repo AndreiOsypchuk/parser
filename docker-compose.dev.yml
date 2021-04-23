@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - '4000:4000'
+    depends_on:
+      - db
+    networks:
+      - custom_network
+    container_name: app_api
+    volumes:
+      - './api:/app'
+
+  client:
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    networks:
+      - custom_network
+    container_name: app_client
+    volumes:
+      - './client:/app'
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+  admin:
+    build:
+      context: ./admin
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - '4001:4001'
+    depends_on:
+      - db
+    networks:
+      - custom_network
+    container_name: app_admin
+    volumes:
+      - './admin:/app'
+
+  db:
+    image: mongo
+    ports:
+      - '27018:27017'
+    volumes:
+      - mongovol:/data/db
+    networks:
+      - custom_network
+    container_name: app_db
+
+volumes:
+  mongovol:
+networks:
+  custom_network:
