@@ -21,8 +21,6 @@ services:
       dockerfile: ./Dockerfile.dev
     ports:
       - '3000:3000'
-    depends_on:
-      - api
     networks:
       - custom_network
     container_name: app_client

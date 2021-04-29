@@ -15,8 +15,6 @@ services:
     build: ./client
     ports:
       - "3000:80"
-    depends_on:
-      - api
     networks:
       - custom_network
     container_name: app_client
