@@ -1,4 +1,4 @@
-import React from "react";
+import "@fontsource/inter";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
@@ -8,11 +8,12 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { store, persistor } from "./store";
+import theme from "./utils";
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           <App />
         </ChakraProvider>
       </BrowserRouter>

@@ -1,35 +1,20 @@
 import "./App.css";
-import { Flex, Heading } from "@chakra-ui/layout";
-import { useDispatch, useSelector } from "react-redux";
-import { RootStoreInterface } from "./store";
-import { LogIn, LogOut } from "./store/user/actions";
-import { LoadTable } from "./store/data/actions";
-import { Button } from "@chakra-ui/button";
 import React from "react";
+import { Route, Switch } from "react-router-dom";
+import { Auth } from "./pages";
+
 function App() {
-  const dispatch = useDispatch();
-  const loggedIn = useSelector<RootStoreInterface, boolean>(
-    ({ user }) => user.loggedIn
-  );
   return (
-    <Flex>
-      <Heading>{loggedIn ? "in" : "out"}</Heading>
-      <Button
-        onClick={() =>
-          dispatch(LogIn({ username: "asdf", _id: "asf", modules: ["asf"] }))
-        }
-      >
-        In
-      </Button>
-      <Button onClick={() => dispatch(LogOut())}>Out</Button>
-      <Button
-        onClick={() =>
-          dispatch(LoadTable([{ name: "ad", id: "asdf", price: 1 }]))
-        }
-      >
-        Load
-      </Button>
-    </Flex>
+    <>
+      <Switch>
+        <Route exact path="/">
+          <Auth />
+        </Route>
+        <Route>
+          <h1>NO page like this OwO</h1>{" "}
+        </Route>
+      </Switch>
+    </>
   );
 }
 

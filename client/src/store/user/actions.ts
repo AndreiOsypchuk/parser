@@ -1,9 +1,9 @@
 import { UserInfo } from "./reducer";
-export const LogIn = (user: UserInfo) => ({
+export const LogInAction = (user: UserInfo) => ({
   type: "LOG_IN",
   payload: user,
 });
 
-export const LogOut = () => ({
+export const LogOutAction = () => ({
   type: "LOG_OUT",
 });
